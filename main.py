@@ -7,10 +7,14 @@ Deterministic: the same line on every run.
 """
 
 import os
+import sys
 
 ROAST = "My agent outsourced this roast to a subagent, then took credit for it in the commit message."
 
 def main():
+    # Self-check the gate before writing: one line, 1-200 chars, not blank.
+    if not (1 <= len(ROAST) <= 200) or "\n" in ROAST or not ROAST.strip():
+        sys.exit("roast fails the 1-200 char single-line gate")
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, "entry.txt")
